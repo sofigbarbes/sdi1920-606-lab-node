@@ -1,9 +1,14 @@
-module.exports = function (app) {
+module.exports = function (app, swig) {
+    /*
     app.get("/canciones", function (req, res) {
         res.send("ver canciones");
     });
-
-
+*/
+    app.get('/canciones/agregar', function (req, res) {
+        let respuesta = swig.renderFile('views/bagregar.html', {
+        });
+        res.send(respuesta);
+    })
     app.get("/canciones/:id", function (req, res) {
         let respuesta = 'id: ' + req.params.id;
         res.send(respuesta);
@@ -17,12 +22,32 @@ module.exports = function (app) {
 
     app.post('/cancion', function (req, res) {
         let respuesta = "Canción agregada: " + req.body.nombre + '<br>'
-            + 'Género: ' + req.body.genero + '<br>' +"Precio: " + req.body.precio;
+            + 'Género: ' + req.body.genero + '<br>' + "Precio: " + req.body.precio;
         res.send(respuesta);
     });
     app.get('/promo*', function (req, res) {
         res.send('Respuesta patrón promo* ');
     })
+
+    app.get("/canciones", function (req, res) {
+        let canciones = [{
+            "nombre": "Blank space",
+            "precio": "1.2",
+        }, {
+            "nombre": "See you again",
+            "precio": "1.3",
+        }, {
+            "nombre": "Uptown Funk",
+            "precio": "1.1",
+        }
+        ];
+        let respuesta = swig.renderFile("views/btienda.html", {
+            vendedor: "Tienda de canciones",
+            canciones: canciones
+        });
+        res.send(respuesta);
+    });
+
 
 
 };
