@@ -8,7 +8,10 @@
 <ul>
 	{% for autor in autores %}
 	<li>
-		{{ autor.nombre }} - {{ autor.grupo }} - {{ autor.rol }}
+		{{ autor.nombre }} - {{ autor.grupo }} -
+		{% for rol in roles %}
+
+		{{ autor.rol }}
 	</li>
 	{% endfor %}
 </ul>
