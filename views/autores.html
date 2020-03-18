@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Autores</title>
+</head>
+<body>
+<h1>{{ vendedor }}</h1>
+<ul>
+	{% for autor in autores %}
+	<li>
+		{{ autor.nombre }} - {{ autor.grupo }} - {{ autor.rol }}
+	</li>
+	{% endfor %}
+</ul>
+</body>
+</html>

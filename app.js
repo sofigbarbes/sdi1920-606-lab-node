@@ -11,6 +11,7 @@ app.use(express.static('public'));
 
 // Variables
 app.set('port', 8081);
+
 /*
 app.get("/canciones", function (req, res) { //obtener los parametros enviados en una peticion get
     // si quisieramos pasar de parametros unos enteros, se concatenarian, asi que tenemos que hacer
@@ -28,6 +29,7 @@ app.get("/canciones", function (req, res) { //obtener los parametros enviados en
 //Rutas/controladores por lógica
 require("./routes/rusuarios.js")(app, swig); // (app, param1, param2, etc.)
 require("./routes/rcanciones.js")(app, swig); // (app, param1, param2, etc.)
+require("./routes/rautores.js")(app, swig); // (app, param1, param2, etc.)
 
 // lanzar el servidor
 app.listen(app.get('port'), function () {
