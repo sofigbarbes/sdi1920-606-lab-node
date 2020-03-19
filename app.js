@@ -3,6 +3,8 @@ let express = require('express');
 let app = express();
 let swig = require('swig');
 let mongo = require('mongodb');
+let fileUpload = require('express-fileupload');
+app.use(fileUpload());
 
 let bodyParser = require('body-parser');
 app.use(bodyParser.json());
