@@ -1,6 +1,9 @@
 // Módulos
 let express = require('express');
 let app = express();
+let fs = require('fs');
+let https = require('https');
+
 let swig = require('swig');
 let mongo = require('mongodb');
 let crypto = require('crypto');
@@ -105,24 +108,22 @@ require("./routes/rautores.js")(app, swig, gestorBD); // (app, param1, param2, e
 require("./routes/rcomentarios.js")(app, swig, gestorBD); // (app, param1, param2, etc.)
 
 // lanzar el servidor
-app.listen(app.get('port'), function () {
+https.createServer({
+    key: fs.readFileSync('certificates/alice.key'),
+    cert: fs.readFileSync('certificates/alice.crt')
+}, app).listen(app.get('port'), function() {
     console.log("Servidor activo");
 });
+
 app.get('/', function (req, res) {
     res.redirect('/tienda');
 });
 
 
-/*
-app.get("/canciones", function (req, res) { //obtener los parametros enviados en una peticion get
-    // si quisieramos pasar de parametros unos enteros, se concatenarian, asi que tenemos que hacer
-    // parseInt(req.query.num1)
-    // res.send(String(respuesta))
-    let respuesta = "";
-    if (req.query.nombre != null)
-        respuesta += 'Nombre: ' + req.query.nombre + '<br>';
-    if (typeof (req.query.autor) != "undefined")
-        respuesta += 'Autor: ' + req.query.autor;
-    res.send(respuesta);
+app.use(function (err,req,res,next) {
+    console.log("Error producido: "+err);
+    if(!res.headerSent){
+        res.status(400);
+        res.send("Recurso no disponible");
+    }
 });
-*/
