@@ -94,7 +94,10 @@ require("./routes/rcomentarios.js")(app, swig, gestorBD); // (app, param1, param
 // lanzar el servidor
 app.listen(app.get('port'), function () {
     console.log("Servidor activo");
-})
+});
+app.get('/', function (req, res) {
+    res.redirect('/tienda');
+});
 
 
 /*
