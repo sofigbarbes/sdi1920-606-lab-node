@@ -107,41 +107,37 @@ module.exports = function (app, swig, gestorBD) {
                 let criterioComent = {"cancion_id": gestorBD.mongo.ObjectID(req.params.id)};
                 let autor = canciones[0].autor;
                 let puedeComprar = true;
-                let criterioUsuario = {"usuario": req.session.usuario};
 
-                if(autor === req.session.usuario)
-                    puedeComprar = false;
-                gestorBD.obtenerCompras(criterioUsuario,
+                let criterio_comprada = {$and: [{"cancionId": gestorBD.mongo.ObjectID(req.params.id)}, {"usuario": req.session.usuario}]}
+                gestorBD.obtenerCompras(criterio_comprada,
                     function (compras) {
-                        if (compras == null) {
-                            res.send("Error al listar ");
+                        if (compras == null || compras.length<=0) {
+                            puedeComprar=true;
                         } else {
-                            let criterioComprado = {"cancion_id": gestorBD.mongo.ObjectID(req.params.id)};
-                            let criterio_comprada = {$and: [{"cancion_id": gestorBD.mongo.ObjectID(req.params.id)}, {"usuario": autor}]}
-                            gestorBD.obtenerCompras(criterio_comprada,
-                                function (compras) {
-                                    if (compras == null || compras.length<=0) {
-                                        puedeComprar=true;
-                                    } else {
-                                        puedeComprar=false;
-                                    }
-                                });
-                        }
-                    });
-                gestorBD.obtenerComentarios(criterioComent, function (comentarios) {
-                    if (comentarios == null) {
-                        res.send(respuesta);
-                    } else {
-                        let respuesta = swig.renderFile('views/bcancion.html',
-                            {
-                                cancion: canciones[0],
-                                comentarios: comentarios,
-                                puedeComprar:puedeComprar
-                            });
-                        res.send(respuesta);
-                    }
+                            puedeComprar=false;
 
-                });
+                        }
+                        if(autor === req.session.usuario){
+                            puedeComprar = false;
+                        }
+                        gestorBD.obtenerComentarios(criterioComent, function (comentarios) {
+                            if (comentarios == null) {
+                                res.send(respuesta);
+                            } else {
+                                let respuesta = swig.renderFile('views/bcancion.html',
+                                    {
+                                        cancion: canciones[0],
+                                        comentarios: comentarios,
+                                        puedeComprar:puedeComprar
+                                    });
+                                res.send(respuesta);
+                            }
+
+                        });
+                    });
+
+
+
             }
         });
 
