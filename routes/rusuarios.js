@@ -16,7 +16,9 @@ module.exports = function (app, swig, gestorBD) {
         }
         gestorBD.insertarUsuario(usuario, function (id) {
             if (id == null) {
-                res.send("/registrarse?mensaje=Error al insertar el usuario");
+                let respuesta = swig.renderFile('views/error.html', {mensaje:'Error al insertar el usuario'});
+                res.send(respuesta);
+                //res.send("/registrarse?mensaje=Error al insertar el usuario");
             } else {
                 res.redirect("/identificarse?mensaje=Nuevo usuario registrado");
             }
@@ -38,9 +40,13 @@ module.exports = function (app, swig, gestorBD) {
         gestorBD.obtenerUsuarios(criterio, function (usuarios) {
             if (usuarios == null || usuarios.length == 0) {
                 req.session.usuario = null;
-                res.redirect("/identificarse" +
+                let respuesta = swig.renderFile('views/error.html', {mensaje:'Email o password incorrectos'});
+                res.send(respuesta);
+               /* res.redirect("/identificarse" +
                     "?mensaje=Email o password incorrecto"+
                     "&tipoMensaje=alert-danger ");
+                    */
+
             } else {
                 req.session.usuario = usuarios[0].email;
                 res.redirect("/publicaciones");
