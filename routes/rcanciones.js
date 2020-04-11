@@ -104,6 +104,61 @@ module.exports = function (app, swig, gestorBD) {
             if (canciones == null) {
                 res.send(respuesta);
             } else {
+
+                var configuracion = {
+                    url: "https://api.exchangeratesapi.io/latest?base=EUR",
+                    method: "get",
+                    headers: {
+                        "token": "ejemplo",
+                    }
+                }
+                var rest = app.get("rest");
+                rest(configuracion, function (error, response, body) {
+                    console.log("cod: " + response.statusCode + " Cuerpo :" + body);
+                    var objetoRespuesta = JSON.parse(body);
+                    var cambioUSD = objetoRespuesta.rates.USD;
+                    // nuevo campo "usd"
+                    canciones[0].usd = cambioUSD * canciones[0].precio;
+
+                    let criterioComent = {"cancion_id": gestorBD.mongo.ObjectID(req.params.id)};
+                    let autor = canciones[0].autor;
+                    let puedeComprar = true;
+
+                    let criterio_comprada = {$and: [{"cancionId": gestorBD.mongo.ObjectID(req.params.id)}, {"usuario": req.session.usuario}]}
+                    gestorBD.obtenerCompras(criterio_comprada,
+                        function (compras) {
+                            if (compras == null || compras.length<=0) {
+                                puedeComprar=true;
+                            } else {
+                                puedeComprar=false;
+
+                            }
+                            if(autor === req.session.usuario){
+                                puedeComprar = false;
+                            }
+                            gestorBD.obtenerComentarios(criterioComent, function (comentarios) {
+                                if (comentarios == null) {
+                                    res.send(respuesta);
+                                } else {
+                                    let respuesta = swig.renderFile('views/bcancion.html',
+                                        {
+                                            cancion: canciones[0],
+                                            comentarios: comentarios,
+                                            puedeComprar:puedeComprar
+                                        });
+                                    res.send(respuesta);
+                                }
+
+                            });
+                        });
+
+
+                })
+
+
+                /*
+
+
                 let criterioComent = {"cancion_id": gestorBD.mongo.ObjectID(req.params.id)};
                 let autor = canciones[0].autor;
                 let puedeComprar = true;
@@ -135,7 +190,7 @@ module.exports = function (app, swig, gestorBD) {
 
                         });
                     });
-
+*/
 
 
             }
