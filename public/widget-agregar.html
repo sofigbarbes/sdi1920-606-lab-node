@@ -52,7 +52,7 @@
 
                 },
                 error : function (error){
-                    $( "#contenedor-principal" ).load("widget-login.html");
+                    $("#contenedor-principal").prepend("<div class='alert alert-danger'>Datos inválidos: Campo vacío o de longitud demasiado pequeña</div>");
                 }
             });
         }

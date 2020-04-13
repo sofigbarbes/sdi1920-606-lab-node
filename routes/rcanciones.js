@@ -131,7 +131,6 @@ module.exports = function (app, swig, gestorBD) {
                                 puedeComprar=true;
                             } else {
                                 puedeComprar=false;
-
                             }
                             if(autor === req.session.usuario){
                                 puedeComprar = false;
