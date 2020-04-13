@@ -15,7 +15,7 @@
         <thead>
         <tr>
             <th><a onclick="ordenarPorNombre()">Nombre</a></th>
-            <th>Genero</th>
+            <th><a onclick="ordenarPorGenero()">Genero</a></th>
             <th><a onclick="ordenarPorPrecio()">Precio</a></th>
             <th class="col-md-1"></th>
         </tr>
@@ -102,9 +102,26 @@
         }
         actualizarTabla(cancionesFiltradas);
     });
+    var generoDsc=true;
+        function ordenarPorGenero(){
+            if(generoDsc){
+                canciones.sort(function(a, b) {
+                    if(a.genero > b.genero ) return 1;
+                    if(a.genero < b.genero ) return -1;
+                    return 0;
+                });
+            }
+            else{
+                canciones.sort(function(a, b) {
+                    if(a.genero > b.genero ) return -1;
+                    if(a.genero < b.genero ) return 1;
+                    return 0;
+                });
+            }
+            actualizarTabla(canciones);
+            generoDsc = !generoDsc; //invertir
+    }
     var precioDsc = true;
-
-
     function ordenarPorPrecio(){
         if (precioDsc){
             canciones.sort(function(a, b) {
@@ -118,13 +135,25 @@
         actualizarTabla(canciones);
         precioDsc = !precioDsc; //invertir
     }
+
+    var nombreDsc = true;
     function ordenarPorNombre(){
-        canciones.sort(function(a, b) {
-            if(a.nombre > b.nombre ) return 1;
-            if(a.nombre < b.nombre ) return -1;
-            return 0;
-        });
+        if(nombreDsc){
+            canciones.sort(function(a, b) {
+                if(a.nombre > b.nombre ) return 1;
+                if(a.nombre < b.nombre ) return -1;
+                return 0;
+            });
+        }
+        else{
+            canciones.sort(function(a, b) {
+                if(a.nombre > b.nombre ) return -1;
+                if(a.nombre < b.nombre ) return 1;
+                return 0;
+            });
+        }
         actualizarTabla(canciones);
+        nombreDsc = !nombreDsc; //invertir
     }
 
 
